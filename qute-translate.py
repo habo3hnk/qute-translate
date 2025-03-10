@@ -46,15 +46,29 @@ class TranslatedWindow(QMainWindow):
         if obj == self.text_edit and event.type() == event.Type.KeyPress:
             key = event.key()
             if key == Qt.Key.Key_J:
-                self.text_edit.verticalScrollBar().setValue(self.text_edit.verticalScrollBar().value() + 20)
+                self.text_edit.verticalScrollBar().setValue(
+                    self.text_edit.verticalScrollBar().value() + 20
+                )
             elif key == Qt.Key.Key_K:
-                self.text_edit.verticalScrollBar().setValue(self.text_edit.verticalScrollBar().value() - 20)
-            elif key == Qt.Key.Key_Q:
+                self.text_edit.verticalScrollBar().setValue(
+                    self.text_edit.verticalScrollBar().value() - 20
+                )
+            elif key in [Qt.Key.Key_Q, Qt.Key.Key_Escape]:
                 self.close()
-            elif key == Qt.Key.Key_G and event.modifiers() == Qt.KeyboardModifier.NoModifier:
-                self.text_edit.verticalScrollBar().setValue(self.text_edit.verticalScrollBar().minimum())
-            elif key == Qt.Key.Key_G and event.modifiers() == Qt.KeyboardModifier.ShiftModifier:
-                self.text_edit.verticalScrollBar().setValue(self.text_edit.verticalScrollBar().maximum())
+            elif (
+                key == Qt.Key.Key_G
+                and event.modifiers() == Qt.KeyboardModifier.NoModifier
+            ):
+                self.text_edit.verticalScrollBar().setValue(
+                    self.text_edit.verticalScrollBar().minimum()
+                )
+            elif (
+                key == Qt.Key.Key_G
+                and event.modifiers() == Qt.KeyboardModifier.ShiftModifier
+            ):
+                self.text_edit.verticalScrollBar().setValue(
+                    self.text_edit.verticalScrollBar().maximum()
+                )
             return True
         return super().eventFilter(obj, event)
 
@@ -63,13 +77,17 @@ class TranslatedWindow(QMainWindow):
 
 
 def extract_translated_text(data):
-    return " ".join(item[0] for item in data[0] if isinstance(item, list) and len(item) > 1)
+    return " ".join(
+        item[0] for item in data[0] if isinstance(item, list) and len(item) > 1
+    )
 
 
 def main():
     app = QApplication(sys.argv)
 
-    subprocess.run(["notify-send", "-u", "low", "qute-translate", "The text translation begins."])
+    subprocess.run(
+        ["notify-send", "-u", "low", "qute-translate", "The text translation begins."]
+    )
 
     selected_text = os.getenv("QUTE_SELECTED_TEXT", "")
     if not selected_text:
