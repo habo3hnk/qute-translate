@@ -20,6 +20,7 @@ This Python script allows you to quickly translate selected text in the Qutebrow
    - Python 3.x
    - PyQt6 (`pip install PyQt6`)
    - `requests` library (`pip install requests`)
+   - `sh` library (`pip install sh`)
 
 2. Copy the script to the Qutebrowser userscripts directory (usually located in the Qutebrowser configuration directory). Then make it executable:
    ```bash
