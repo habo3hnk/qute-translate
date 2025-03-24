@@ -43,34 +43,50 @@ class TranslatedWindow(QMainWindow):
         self.setStyleSheet(f"background-color: {BG_COLOR}; color: {FG_COLOR};")
 
     def eventFilter(self, obj, event):
-        if obj == self.text_edit and event.type() == event.Type.KeyPress:
-            key = event.key()
-            if key == Qt.Key.Key_J:
-                self.text_edit.verticalScrollBar().setValue(
-                    self.text_edit.verticalScrollBar().value() + 20
-                )
-            elif key == Qt.Key.Key_K:
-                self.text_edit.verticalScrollBar().setValue(
-                    self.text_edit.verticalScrollBar().value() - 20
-                )
-            elif key in [Qt.Key.Key_Q, Qt.Key.Key_Escape]:
-                self.close()
-            elif (
-                key == Qt.Key.Key_G
-                and event.modifiers() == Qt.KeyboardModifier.NoModifier
-            ):
-                self.text_edit.verticalScrollBar().setValue(
-                    self.text_edit.verticalScrollBar().minimum()
-                )
-            elif (
-                key == Qt.Key.Key_G
-                and event.modifiers() == Qt.KeyboardModifier.ShiftModifier
-            ):
-                self.text_edit.verticalScrollBar().setValue(
-                    self.text_edit.verticalScrollBar().maximum()
-                )
+        if obj != self.text_edit or event.type() != event.Type.KeyPress:
+            return super().eventFilter(obj, event)
+
+        key = event.key()
+        modifiers = event.modifiers()
+
+        key_actions = {
+            (Qt.Key.Key_J, Qt.KeyboardModifier.NoModifier): self.scroll_down,
+            (Qt.Key.Key_K, Qt.KeyboardModifier.NoModifier): self.scroll_up,
+            (Qt.Key.Key_Q, Qt.KeyboardModifier.NoModifier): self.close_window,
+            (Qt.Key.Key_Escape, Qt.KeyboardModifier.NoModifier): self.close_window,
+            (Qt.Key.Key_G, Qt.KeyboardModifier.NoModifier): self.scroll_to_top,
+            (Qt.Key.Key_G, Qt.KeyboardModifier.ShiftModifier): self.scroll_to_bottom,
+        }
+
+        action = key_actions.get((key, modifiers))
+        if action:
+            action()
             return True
+
         return super().eventFilter(obj, event)
+
+    def scroll_down(self):
+        self.text_edit.verticalScrollBar().setValue(
+            self.text_edit.verticalScrollBar().value() + 20
+        )
+
+    def scroll_up(self):
+        self.text_edit.verticalScrollBar().setValue(
+            self.text_edit.verticalScrollBar().value() - 20
+        )
+
+    def scroll_to_top(self):
+        self.text_edit.verticalScrollBar().setValue(
+            self.text_edit.verticalScrollBar().minimum()
+        )
+
+    def scroll_to_bottom(self):
+        self.text_edit.verticalScrollBar().setValue(
+            self.text_edit.verticalScrollBar().maximum()
+        )
+
+    def close_window(self):
+        self.close()
 
     def add_text(self, translated_text):
         self.text_edit.setPlainText(translated_text)
@@ -99,7 +115,7 @@ def main():
         "q": selected_text,
     }
 
-    response = requests.get(URL, params=params)
+    response = requests.get(URL, params=params, timeout=10)
     if response.status_code != 200:
         sys.exit(0)
 
