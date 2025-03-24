@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
+import sh
 import os
-import subprocess
 import sys
 import requests
 from PyQt6.QtWidgets import (
@@ -85,9 +85,7 @@ def extract_translated_text(data):
 def main():
     app = QApplication(sys.argv)
 
-    subprocess.run(
-        ["notify-send", "-u", "low", "qute-translate", "The text translation begins."]
-    )
+    sh.notify_send("-u", "low", "qute-translate", "The text translation begins.")
 
     selected_text = os.getenv("QUTE_SELECTED_TEXT", "")
     if not selected_text:
