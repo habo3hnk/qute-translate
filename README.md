@@ -2,7 +2,7 @@
 
 This Python script allows you to quickly translate selected text in the Qutebrowser browser into a target language (default is Russian) and display the result in a separate window using the PyQt6 graphical interface.
 
-![example](media/examlpe.gif)
+![example](media/example.gif)
 ## Main Features
 
 - **Text Translation**: The script uses the unofficial Google Translate API to translate selected text into the target language.
