@@ -66,24 +66,32 @@ class TranslatedWindow(QMainWindow):
         return super().eventFilter(obj, event)
 
     def scroll_down(self):
-        self.text_edit.verticalScrollBar().setValue(
-            self.text_edit.verticalScrollBar().value() + 20
-        )
+        scroll_bar = self.text_edit.verticalScrollBar()
+        if scroll_bar:
+            scroll_bar.setValue(scroll_bar.value() + 20)
+        else:
+            print("Scroll bar not found")
 
     def scroll_up(self):
-        self.text_edit.verticalScrollBar().setValue(
-            self.text_edit.verticalScrollBar().value() - 20
-        )
+        scroll_bar = self.text_edit.verticalScrollBar()
+        if scroll_bar:
+            scroll_bar.setValue(scroll_bar.value() - 20)
+        else:
+            print("Scroll bar not found")
 
     def scroll_to_top(self):
-        self.text_edit.verticalScrollBar().setValue(
-            self.text_edit.verticalScrollBar().minimum()
-        )
+        scroll_bar = self.text_edit.verticalScrollBar()
+        if scroll_bar:
+            scroll_bar.setValue(scroll_bar.minimum())
+        else:
+            print("Scroll bar not found")
 
     def scroll_to_bottom(self):
-        self.text_edit.verticalScrollBar().setValue(
-            self.text_edit.verticalScrollBar().maximum()
-        )
+        scroll_bar = self.text_edit.verticalScrollBar()
+        if scroll_bar:
+            scroll_bar.setValue(scroll_bar.maximum())
+        else:
+            print("Scroll bar not found")
 
     def close_window(self):
         self.close()
